@@ -1,5 +1,13 @@
-import React,{useState} from "react";
-import { StyleSheet, Text, View, TextInput, Image } from "react-native";
+import React, { useState } from "react";
+import {
+  StyleSheet,
+  Text,
+  View,
+  TextInput,
+  Image,
+  KeyboardAvoidingView,
+  Platform,
+} from "react-native";
 import { Feather } from "@expo/vector-icons";
 import { car } from "../assets/index";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
@@ -26,7 +34,10 @@ const MapOption = () => {
     setDestination(text);
   };
   return (
-    <View style={styles.container}>
+    <KeyboardAvoidingView
+      style={styles.container}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+    >
       <View style={styles.backgroundWrapper}>
         <View style={styles.book}>
           <View style={styles.destinationContainer}>
@@ -47,7 +58,15 @@ const MapOption = () => {
             </View>
           </View>
           <View style={styles.history}>
-            <DestinationHistory title="Home" address="Landmark center" />
+            <DestinationHistory
+              title="Hard Rock Cafe"
+              address="Landmark center"
+            />
+            <DestinationHistory title="Home" address="Lagos Nigeria" />
+            <DestinationHistory
+              title="30 alapere street"
+              address="Lagos Nigeria"
+            />
           </View>
         </View>
       </View>
@@ -55,7 +74,7 @@ const MapOption = () => {
         <Feather name="check" size={16} color="white" />
         <Text style={styles.promoTxt}>20% promo applied</Text>
       </View>
-    </View>
+    </KeyboardAvoidingView>
   );
 };
 
@@ -82,6 +101,9 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     paddingBottom: 15,
     gap: 20,
+  },
+  promoTxt: {
+    color: "#fff",
   },
   book: {
     marginTop: 30,
@@ -137,6 +159,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingHorizontal: 10,
     borderBottomWidth: StyleSheet.hairlineWidth,
+    borderColor: "gray",
     paddingVertical: 6,
     marginVertical: 12,
     gap: 10,
