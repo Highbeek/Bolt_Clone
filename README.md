@@ -1,4 +1,4 @@
-# 🚀 Bolt Clone App
+# 🚀 Bolt Clone App (In View)
 
 The Bolt Clone App replicates the functionalities of the renowned Bolt platform, allowing users to experience seamless ride-hailing services. With this clone, users can request rides, view available drivers, and enjoy a convenient travel experience.
 
