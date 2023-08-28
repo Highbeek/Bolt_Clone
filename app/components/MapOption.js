@@ -7,10 +7,12 @@ import {
   Image,
   KeyboardAvoidingView,
   Platform,
+  TouchableOpacity,
+  Modal,
 } from "react-native";
-import { Feather } from "@expo/vector-icons";
+import { Feather, MaterialCommunityIcons } from "@expo/vector-icons";
 import { car } from "../assets/index";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import RouteScreen from "../screens/RouteScreen";
 
 export const DestinationHistory = ({ title, address }) => {
   return (
@@ -30,9 +32,21 @@ export const DestinationHistory = ({ title, address }) => {
 
 const MapOption = () => {
   const [destination, setDestination] = useState("");
+  const [isModalVisible, setIsModalVisible] = useState(false);
   const handleDestinationChange = (text) => {
     setDestination(text);
   };
+
+  const openModal = () => {
+    setIsModalVisible(true);
+  };
+
+  const closeModal = () => {
+    setIsModalVisible(false);
+  };
+   const handleTextInputFocus = () => {
+     openModal();
+   };
   return (
     <KeyboardAvoidingView
       style={styles.container}
@@ -45,13 +59,24 @@ const MapOption = () => {
               <View style={styles.iconContainer}>
                 <Feather name="search" size={18} color="black" />
               </View>
-              <TextInput
-                placeholder="Where to?"
-                placeholderTextColor="black"
-                onChangeText={handleDestinationChange}
-                value={destination}
-                style={styles.whereTo}
-              />
+              <TouchableOpacity onPress={openModal}>
+                <TextInput
+                  placeholder="Where to?"
+                  placeholderTextColor="black"
+                  onChangeText={handleDestinationChange}
+                  value={destination}
+                  style={styles.whereTo}
+                  onFocus={handleTextInputFocus}
+                />
+              </TouchableOpacity>
+              <Modal
+                animationType="slide"
+                transparent={false}
+                visible={isModalVisible}
+                onRequestClose={closeModal}
+              >
+                <RouteScreen onClose={closeModal} />
+              </Modal>
             </View>
             <View style={styles.ride}>
               <Image source={car} style={styles.img} />
@@ -116,6 +141,7 @@ const styles = StyleSheet.create({
   whereTo: {
     fontSize: 18,
     fontWeight: "800",
+    width: "100%",
   },
   iconContainer: {
     height: 30,
