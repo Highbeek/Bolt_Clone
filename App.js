@@ -15,7 +15,9 @@ const App = () => {
         initialRouteName="Home"
         drawerContent={NavDrawer}
         overlayColor="transparent"
-        drawerType="overlay"
+        screenOptions={{
+          drawerType: "front",
+        }}
       >
         <Drawer.Screen
           name="Home"

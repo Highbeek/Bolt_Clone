@@ -9,9 +9,14 @@ import {
 } from "react-native";
 import { Ionicons, MaterialIcons, Feather } from "@expo/vector-icons";
 import { route } from "../assets/index";
+import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
+import { GOOGLE_MAPS_APIKEY } from "@env";
+
+
 
 const RouteScreen = ({ onClose }) => {
   const [destination, setDestination] = useState("");
+  const [presentLocation, setPresentLocation] = useState("");
   const destinationInputRef = useRef(null);
 
   useEffect(() => {
@@ -20,6 +25,10 @@ const RouteScreen = ({ onClose }) => {
 
   const handleDestinationChange = (text) => {
     setDestination(text);
+  };
+
+  const handlePresentLocationChange = (text) => {
+    setPresentLocation(text);
   };
 
   return (
@@ -34,30 +43,53 @@ const RouteScreen = ({ onClose }) => {
           <View style={styles.iconContainer}>
             <Feather name="search" size={18} color="black" />
           </View>
-          <TouchableOpacity>
-            <TextInput
-              placeholder="Present Location"
-              placeholderTextColor="black"
-              onChangeText={handleDestinationChange}
-              value={destination}
-              style={styles.whereTo}
-            />
-          </TouchableOpacity>
+          <GooglePlacesAutocomplete
+            textInputProps={{
+              placeholder: "Present Location",
+              placeholderTextColor: "black",
+              style: [styles.googlePlacesTextInput],
+            }}
+            styles={{
+              textInputContainer: styles.googlePlacesTextInputContainer,
+              textInput: styles.googlePlacesTextInput,
+              listView: styles.listView,
+            }}
+            query={{
+              key: GOOGLE_MAPS_APIKEY,
+              language: "en",
+            }}
+            nearbyPlacesAPI="GooglePlacesSearch"
+            debounce={400}
+            onChangeText={handlePresentLocationChange}
+            value={presentLocation}
+            autoFocus
+          />
         </View>
-        <View style={[styles.destination, styles.destinationInput]}>
+      </View>
+      <View style={styles.locationContainer}>
+        <View style={styles.destination}>
           <View style={styles.iconContainer}>
             <Feather name="search" size={18} color="black" />
           </View>
-          <TouchableOpacity>
-            <TextInput
-              ref={destinationInputRef}
-              placeholder="Destination"
-              placeholderTextColor="black"
-              onChangeText={handleDestinationChange}
-              value={destination}
-              style={styles.whereTo}
-            />
-          </TouchableOpacity>
+          <GooglePlacesAutocomplete
+            textInputProps={{
+              placeholder: "Destination",
+              placeholderTextColor: "black",
+              style: [styles.googlePlacesTextInput],
+            }}
+            styles={{
+              textInput: styles.googlePlacesTextInput,
+              container: styles.googlePlacesContainer,
+              listView: styles.listView,
+            }}
+            query={{
+              key: GOOGLE_MAPS_APIKEY,
+              language: "en",
+            }}
+            nearbyPlacesAPI="GooglePlacesSearch"
+            debounce={400}
+            ref={destinationInputRef}
+          />
           <Image source={route} style={styles.image} />
         </View>
       </View>
@@ -65,7 +97,12 @@ const RouteScreen = ({ onClose }) => {
   );
 };
 
-export default RouteScreen;
+
+
+
+
+
+
 
 const styles = StyleSheet.create({
   container: {
@@ -83,19 +120,19 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontWeight: "500",
   },
-  locationContainer: {},
-
+  locationContainer: {
+    marginTop: 0,
+  },
   destination: {
     flexDirection: "row",
     alignItems: "center",
     backgroundColor: "#F4F4F6",
     paddingHorizontal: 15,
-    paddingVertical: 10,
+    paddingVertical: 8,
     paddingRight: "auto",
     borderRadius: 10,
-    gap: 15,
     width: "100%",
-    marginVertical: 10,
+    marginVertical: 5,
   },
   iconContainer: {
     height: 30,
@@ -115,13 +152,35 @@ const styles = StyleSheet.create({
     height: 28,
     marginLeft: "auto",
   },
-  destinationInput: {
+  googlePlacesContainer: {
+    flex: 1,
+    // borderWidth: 2,
+    // borderColor: "#38b000",
+  },
+
+  googlePlacesTextInputContainer: {
+    position: "relative",
     flexDirection: "row",
-    backgroundColor: "#fff",
     alignItems: "center",
-    paddingHorizontal: 15,
-    paddingVertical: 10,
-    borderWidth: 2,
-    borderColor: "#38b000",
+    paddingHorizontal: 5,
+    borderRadius: 10,
+  },
+  googlePlacesTextInput: {
+    fontSize: 18,
+    width: "100%",
+    backgroundColor: "transparent",
+    paddingHorizontal: 5,
+  },
+  listView: {
+    position: "absolute",
+    top: "120%",
+    left: "50%",
+    transform: [{ translateX: -150 }],
+    width: 300,
+    backgroundColor: "white",
+    zIndex: 1,
+    elevation: 5,
   },
 });
+
+export default RouteScreen;
